@@ -47,6 +47,37 @@ Requires Docker. Uses the same pinned IIC-OSIC-TOOLS image as asic_rd
 The final authority is uploading the GDS to <https://platform.wafer.space>
 and passing its precheck and COB checks.
 
+## Result (2026-08-31): PASS at the local-check level
+
+Built with the pinned PDK commit `f6eeac7d`, `SLOT=0p5x1`,
+`SCL=gf180mcu_as_sc_mcu7t3v3`, `PAD=gf180mcu_ocd_io`,
+`SRAM=gf180mcu_ocd_ip_sram`. `gf180mcu-precheck` was run with `--cob`:
+
+| Check | Result |
+| --- | --- |
+| Slot dimensions (0p5x1) | PASS |
+| **COB pad mask (`CheckPadMask`)** | **PASS — "Pad mask matches!"** |
+| KLayout antenna | PASS (0 errors) |
+| Magic DRC | PASS (0 errors) |
+| KLayout DRC | PASS (0 violations) |
+| KLayout density | 4 minimum-density errors (`DCF.1b`, `PL.8`, `M1.4`, `M2.4`) |
+
+The density errors are an artifact of the empty core (no logic, no fill) and
+are resolved by normal fill insertion in a full chip build; they are not
+caused by the pad re-typing. The second core pair is placed as
+`gf180mcu_ocd_io__vdd`/`__vss` at the former `bidir[43:42]` west-edge
+positions with the pad mask unchanged.
+
+Conclusion: a second core supply pair on the `0p5x1` default ring is
+COB-compatible as far as every local check can determine. Remaining
+confirmation: run the same GDS through <https://platform.wafer.space>.
+
+Notes: two LibreLane steps (`OpenROAD.STAPrePNR`, `OpenROAD.DumpRCValues`)
+are skipped in `scripts/padring.py` because the IIC-OSIC-TOOLS OpenSTA binary
+is incompatible with this LibreLane version; both are irrelevant to padring
+geometry. The container also exports `PDK=ihp-sg13g2`, so `PDK=gf180mcuD`
+must be passed explicitly to make (handled by `run-experiment.sh`).
+
 ## Pass/fail interpretation
 
 - Pass: freeze the `0p5x1` + second-core-pair plan; proceed to the AVDD net

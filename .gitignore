@@ -12,3 +12,5 @@ gf180mcu-precheck/
 precheck-out/
 librelane/runs/
 src/generated_defines.svh
+build.log
+precheck.log
