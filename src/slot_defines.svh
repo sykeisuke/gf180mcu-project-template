@@ -20,12 +20,14 @@
 `define NUM_DVDD_PADS 7
 `define NUM_DVSS_PADS 7
 
-`define NUM_VDD_PADS 1
-`define NUM_VSS_PADS 1
+// Experiment: second core pair (intended AVDD/AVSS position) replaces
+// bidir[43:42] so every bond-pad position stays unchanged for COB.
+`define NUM_VDD_PADS 2
+`define NUM_VSS_PADS 2
 
 // Signal pads
 `define NUM_INPUT_PADS 4
-`define NUM_BIDIR_PADS 44
+`define NUM_BIDIR_PADS 42
 `define NUM_ANALOG_PADS 6
 
 `endif
