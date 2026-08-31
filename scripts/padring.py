@@ -48,9 +48,15 @@ class PadringFlow(SequentialFlow):
         Checker.NetlistAssignStatements,
         OpenROAD.CheckSDCFiles,
         OpenROAD.CheckMacroInstances,
-        OpenROAD.STAPrePNR,
+        # STAPrePNR is skipped in this experiment: the IIC-OSIC-TOOLS
+        # container's OpenSTA binary is incompatible with this LibreLane
+        # script version ("scene" API error), and timing is irrelevant to
+        # the padring-geometry question being tested.
+        # OpenROAD.STAPrePNR,
         OpenROAD.Floorplan,
-        OpenROAD.DumpRCValues,
+        # DumpRCValues also invokes the incompatible OpenSTA (see above)
+        # and is irrelevant to padring geometry.
+        # OpenROAD.DumpRCValues,
         Odb.SetPowerConnections,
         OpenROAD.PadRing,
         Odb.CheckMacroAntennaProperties,

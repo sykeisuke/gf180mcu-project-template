@@ -28,8 +28,11 @@ build)
         "$EDA_IMAGE" -lc '
             set -euo pipefail
             cd /foss/designs/padring-experiment
-            make clone-pdk PDK_ROOT=/foss/designs/padring-experiment/gf180mcu
-            make librelane-padring \
+            # The container login shell exports PDK=ihp-sg13g2, which would
+            # override the Makefile default; pass PDK explicitly.
+            make clone-pdk PDK=gf180mcuD \
+                PDK_ROOT=/foss/designs/padring-experiment/gf180mcu
+            make librelane-padring PDK=gf180mcuD \
                 PDK_ROOT=/foss/designs/padring-experiment/gf180mcu \
                 SLOT=0p5x1 \
                 SCL=gf180mcu_as_sc_mcu7t3v3 \
@@ -56,10 +59,11 @@ precheck)
         "$EDA_IMAGE" -lc "
             set -euo pipefail
             cd /foss/designs/padring-experiment/gf180mcu-precheck
+            mkdir -p /foss/designs/padring-experiment/precheck-out
             PDK_ROOT=/foss/designs/padring-experiment/gf180mcu PDK=gf180mcuD \
-            python3 precheck.py --slot 0p5x1 \
+            python3 precheck.py --slot 0p5x1 --cob \
                 --input \"/foss/designs/padring-experiment/$gds_rel\" \
-                --output /foss/designs/padring-experiment/precheck-out
+                --output /foss/designs/padring-experiment/precheck-out/chip_top.precheck.gds
         "
     ;;
 *)
