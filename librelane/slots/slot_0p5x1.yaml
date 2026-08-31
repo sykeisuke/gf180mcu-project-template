@@ -72,8 +72,10 @@ PAD_NORTH: [
 
 
 PAD_WEST: [
-    "bidir\\[43\\].pad",
-    "bidir\\[42\\].pad",
+    # Experiment: second core supply pair (intended AVDD/AVSS position)
+    # replaces bidir[43] and bidir[42]; bond-pad positions unchanged for COB.
+    "vss_pads\\[1\\].pad",
+    "vdd_pads\\[1\\].pad",
     "bidir\\[41\\].pad",
     
     "vss_pads\\[0\\].pad",
