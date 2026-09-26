@@ -21,6 +21,7 @@
 `define gf180mcu_xxx_io__in_c gf180mcu_ocd_io__in_c
 `define gf180mcu_xxx_io__bi_24t gf180mcu_ocd_io__bi_24t
 `define gf180mcu_xxx_io__asig_5p0 gf180mcu_ocd_io__asig_5p0
+`define gf180mcu_xxx_io__bi_a gf180mcu_ocd_io__bi_a
 `else
 `define gf180mcu_xxx_io__vdd gf180mcu_fd_io__dvdd
 `define gf180mcu_xxx_io__vss gf180mcu_fd_io__dvss
@@ -30,6 +31,7 @@
 `define gf180mcu_xxx_io__in_c gf180mcu_fd_io__in_c
 `define gf180mcu_xxx_io__bi_24t gf180mcu_fd_io__bi_24t
 `define gf180mcu_xxx_io__asig_5p0 gf180mcu_fd_io__asig_5p0
+`define gf180mcu_xxx_io__bi_a gf180mcu_fd_io__bi_a
 `endif
 
 module chip_top #(
@@ -215,18 +217,51 @@ module chip_top #(
     end
     endgenerate
 
+    // Analog pads. asic_rd digital-on-top experiment (2026-09-25): pads
+    // 0..2 carry the comparator macro's analog inputs. The pure analog pad
+    // (asig_5p0) exposes only the bond-pad net, which the detailed router
+    // cannot access (its 2.54 um Metal2 fingers get no access points), so
+    // these three use the bidirectional pad with analog pass (bi_a): its
+    // core-side ANA pin is an ordinary routable stub. Digital driver and
+    // receiver are disabled. Pads 3..5 stay asig_5p0 (unused).
+    wire [NUM_ANALOG_PADS-1:0] analog_CORE;
     generate
     for (genvar i=0; i<NUM_ANALOG_PADS; i++) begin : analog
-        (* keep *)
-        `gf180mcu_xxx_io__asig_5p0 pad (
-            `ifdef USE_POWER_PINS
-            .DVDD   (DVDD),
-            .DVSS   (DVSS),
-            .VDD    (VDD),
-            .VSS    (VSS),
-            `endif
-            .ASIG5V (analog_PAD[i])
-        );
+        if (i < 3) begin : routable
+            (* keep *)
+            `gf180mcu_xxx_io__bi_a pad (
+                `ifdef USE_POWER_PINS
+                .DVDD   (DVDD),
+                .DVSS   (DVSS),
+                .VDD    (VDD),
+                .VSS    (VSS),
+                `endif
+                .A      (1'b0),
+                .OE     (1'b0),
+                .IE     (1'b0),
+                .CS     (1'b0),
+                .SL     (1'b0),
+                .PU     (1'b0),
+                .PD     (1'b0),
+                .PDRV0  (1'b0),
+                .PDRV1  (1'b0),
+                .Y      (),
+                .ANA    (analog_CORE[i]),
+                .PAD    (analog_PAD[i])
+            );
+        end else begin : plain
+            (* keep *)
+            `gf180mcu_xxx_io__asig_5p0 pad (
+                `ifdef USE_POWER_PINS
+                .DVDD   (DVDD),
+                .DVSS   (DVSS),
+                .VDD    (VDD),
+                .VSS    (VSS),
+                `endif
+                .ASIG5V (analog_PAD[i])
+            );
+            assign analog_CORE[i] = 1'bz;
+        end
     end
     endgenerate
 
@@ -258,7 +293,7 @@ module chip_top #(
         .bidir_pu   (bidir_CORE2PAD_PU),
         .bidir_pd   (bidir_CORE2PAD_PD),
         
-        .analog     (analog_PAD)
+        .analog     (analog_CORE)
     );
     
     // Do not remove, necessary for tapeout
