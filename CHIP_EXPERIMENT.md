@@ -88,4 +88,18 @@ Render: `final_chip/chip_top_small.png`; metrics: `final_chip/metrics.csv`.
   connection). Decision for the analog owner; spec currently says asig.
 - The comparator here is the v0.5 placeholder; repeat with the 0.6 cell /
   comparator macros.
-- Precheck (gf180mcu-precheck --cob) — see below.
+
+## Precheck (gf180mcu-precheck, `--slot 0p5x1 --cob`, on `chip_bia5` GDS)
+
+| Check | Result |
+| --- | --- |
+| Design name / slot dimensions | match |
+| COB pad mask | **"Pad mask matches!"** |
+| KLayout density | clear (real fill this time, no empty-core artifact) |
+| KLayout antenna | clear |
+| Magic DRC | clear |
+| KLayout DRC | clear |
+
+Log: `precheck_bia5.log` (not committed). The GDS is therefore a candidate for
+the platform upload (platform.wafer.space) as a further check, with a
+placeholder comparator.
