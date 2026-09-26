@@ -58,16 +58,16 @@ PAD_EAST: [
 ]
 
 PAD_NORTH: [
-    "analog\\[5\\].pad",
-    "analog\\[4\\].pad",
-    "analog\\[3\\].pad",
+    "analog\\[5\\].plain.pad",
+    "analog\\[4\\].plain.pad",
+    "analog\\[3\\].plain.pad",
 
     "dvss_pads\\[4\\].pad",
     "dvdd_pads\\[4\\].pad",
 
-    "analog\\[2\\].pad",
-    "analog\\[1\\].pad",
-    "analog\\[0\\].pad"
+    "analog\\[2\\].routable.pad",
+    "analog\\[1\\].routable.pad",
+    "analog\\[0\\].routable.pad"
 ]
 
 
