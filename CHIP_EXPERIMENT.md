@@ -103,3 +103,27 @@ Render: `final_chip/chip_top_small.png`; metrics: `final_chip/metrics.csv`.
 Log: `precheck_bia5.log` (not committed). The GDS is therefore a candidate for
 the platform upload (platform.wafer.space) as a further check, with a
 placeholder comparator.
+
+## 1x0p5 slot (branch `slot-1x0p5`, 2026-10-02)
+
+The 0.5x1 slot sold out; the project moves to **1x0.5** (die 3.932 x 2.531 mm,
+core 3.048 x 1.647 mm, 4 analog pads on the west edge, one core supply pair
+by default). Changes against the 0p5x1 branch: `SLOT_1X0P5` gets a second
+core pair in place of `bidir[45:44]` (north-west corner, next to the default
+pair; bond-pad positions unchanged, 44 bidir pads left), the analog pad
+instance names in `slot_1x0p5.yaml`, the macro moved to (1500, 1200), and
+`run-chip.sh` takes `SLOT=` (default `1x0p5`).
+
+Run `chip_1x0p5b` (3.3 V `as_sc_mcu7t3v3`, `ocd_io`, `bi_a` analog pads):
+
+| Check | Result |
+| --- | --- |
+| Routing / Magic / KLayout DRC, density | 0 / 0 / 0 / 0 |
+| Antenna | 0 |
+| Netgen LVS | 0, analog pad-to-macro nets routed (checked in the DEF) |
+| Setup / hold, 9 corners | 0 / 0 (worst 24.1 ns / 0.35 ns) |
+| Macro power connectivity | all VDD/VSS shapes connected |
+| Instances | 200491 (36280 std cells incl. fill) |
+
+Render: `final_chip_1x0p5/chip_top_small.png`; metrics: `final_chip_1x0p5/metrics.csv`.
+Precheck: see the line appended below once `gf180mcu-precheck --slot 1x0p5 --cob` finishes.

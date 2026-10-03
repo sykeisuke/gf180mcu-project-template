@@ -55,8 +55,10 @@ PAD_EAST: [
 ]
 
 PAD_NORTH: [
-    "bidir\\[45\\].pad",
-    "bidir\\[44\\].pad",
+    # asic_rd: second core supply pair (AVDD position) replaces bidir[45]
+    # and bidir[44]; bond-pad positions unchanged for COB.
+    "vss_pads\\[1\\].pad",
+    "vdd_pads\\[1\\].pad",
     "bidir\\[43\\].pad",
     "bidir\\[42\\].pad",
     
@@ -95,10 +97,10 @@ PAD_WEST: [
     "inputs\\[1\\].pad",
     "inputs\\[0\\].pad",
     
-    "analog\\[3\\].pad",
-    "analog\\[2\\].pad",
-    "analog\\[1\\].pad",
-    "analog\\[0\\].pad",
+    "analog\\[3\\].plain.pad",
+    "analog\\[2\\].routable.pad",
+    "analog\\[1\\].routable.pad",
+    "analog\\[0\\].routable.pad",
     
     "dvss_pads\\[6\\].pad",
     "dvdd_pads\\[6\\].pad"

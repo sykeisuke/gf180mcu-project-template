@@ -94,7 +94,7 @@ MACROS:
         - dir::../ip/comparator_min/lib/comparator_min.lib
     instances:
       i_chip_core.cmp0:
-        location: [900, 2000]
+        location: [1500, 1200]
         orientation: N
 
 PDN_MACRO_CONNECTIONS:
