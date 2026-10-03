@@ -38,12 +38,15 @@
 `define NUM_DVDD_PADS 7
 `define NUM_DVSS_PADS 7
 
-`define NUM_VDD_PADS 1
-`define NUM_VSS_PADS 1
+// asic_rd: second core pair (AVDD position) replaces bidir[45:44] so every
+// bond-pad position stays unchanged for COB (same approach as the 0p5x1
+// experiment, which passed the platform CoB precheck).
+`define NUM_VDD_PADS 2
+`define NUM_VSS_PADS 2
 
 // Signal pads
 `define NUM_INPUT_PADS 4
-`define NUM_BIDIR_PADS 46
+`define NUM_BIDIR_PADS 44
 `define NUM_ANALOG_PADS 4
 
 `endif
