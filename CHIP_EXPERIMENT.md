@@ -126,4 +126,6 @@ Run `chip_1x0p5b` (3.3 V `as_sc_mcu7t3v3`, `ocd_io`, `bi_a` analog pads):
 | Instances | 200491 (36280 std cells incl. fill) |
 
 Render: `final_chip_1x0p5/chip_top_small.png`; metrics: `final_chip_1x0p5/metrics.csv`.
-Precheck: see the line appended below once `gf180mcu-precheck --slot 1x0p5 --cob` finishes.
+Precheck (`gf180mcu-precheck --slot 1x0p5 --cob`, run 2026-10-03): design name
+and slot dimensions match, **COB pad mask matches**, KLayout density, antenna,
+Magic DRC and KLayout DRC all clear.
