@@ -129,3 +129,16 @@ Render: `final_chip_1x0p5/chip_top_small.png`; metrics: `final_chip_1x0p5/metric
 Precheck (`gf180mcu-precheck --slot 1x0p5 --cob`, run 2026-10-03): design name
 and slot dimensions match, **COB pad mask matches**, KLayout density, antenna,
 Magic DRC and KLayout DRC all clear.
+
+## Precheck 1.7.4 with PDK `792ef670` (provider update of 2026-10-20), run 2026-10-31
+
+The same `chip_1x0p5b` GDS (built on PDK `f6eeac7d`) checked with precheck
+1.7.4 against a separate ciel root at `792ef67037d74c8c51811eab3ce23cf793491296`:
+design name and slot size match, **COB pad mask matches**, KLayout density,
+antenna, Magic DRC and KLayout DRC (733 rules incl. the new CO.5a/b and
+DCF.1a decks) all clear. The new decks are slower: about 5 h single-threaded
+for the KLayout DRC alone on this die (two concurrent runs shared the CPU).
+PDK differences relevant to us: `as_sc_mcu7t3v3` gains 24 cells, only
+`nand3_2`/`nand4_2` re-characterized (`dfxtn_2`, `dlybuff_2` identical);
+`ocd_io` LEF identical, GDS changed; ngspice models differ only in the
+`fox_sub` syntax; Magic tech file changed (well painting, resistor layers).
