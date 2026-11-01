@@ -156,3 +156,9 @@ DRC, antenna, density, Magic DRC, KLayout DRC and LVS all clear; 0 setup/hold
 violations. KLayout DRC with the new decks took 17 min with the configured
 worker count (vs. about 5 h single-threaded in the precheck run above).
 Metrics: `final_chip_1x0p5_pdk792/metrics.csv`.
+Precheck 1.7.4 (`--slot 1x0p5 --cob`, `PDK_ROOT` = the same 792ef670 root)
+on this GDS: slot size and design name match, **COB pad mask matches**,
+KLayout density, antenna, Magic DRC and KLayout DRC all clear (log:
+`precheck_1x0p5_pdk792.log`, 31 min for the KLayout DRC with 10 threads).
+This branch is therefore the candidate for `WS_TEMPLATE_COMMIT` = 1.6.0 in
+asic_rd.
