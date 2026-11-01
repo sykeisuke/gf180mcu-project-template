@@ -142,3 +142,17 @@ PDK differences relevant to us: `as_sc_mcu7t3v3` gains 24 cells, only
 `nand3_2`/`nand4_2` re-characterized (`dfxtn_2`, `dlybuff_2` identical);
 `ocd_io` LEF identical, GDS changed; ngspice models differ only in the
 `fox_sub` syntax; Magic tech file changed (well painting, resistor layers).
+
+## Rebuild on template 1.6.0 + PDK `792ef670` (branch `slot-1x0p5-t160`), run 2026-10-31
+
+The 1x0p5 branch rebased onto tag 1.6.0 (no conflicts). `run-chip.sh` now
+mounts a ciel-fetched PDK root (`PDK_ROOT_HOST`, default
+`~/Desktop/mywork/pdk792`) at `/pdk_root` and passes it as `--pdk-root`;
+`patch_pad_libs.py` patches the pad Liberty there. The container image's own
+`/foss/pdks` (f6eeac7d) is no longer used by the chip flow.
+
+Full chip (`chip_1x0p5_pdk792`, 36243 std cells, 200315 instances): routing
+DRC, antenna, density, Magic DRC, KLayout DRC and LVS all clear; 0 setup/hold
+violations. KLayout DRC with the new decks took 17 min with the configured
+worker count (vs. about 5 h single-threaded in the precheck run above).
+Metrics: `final_chip_1x0p5_pdk792/metrics.csv`.

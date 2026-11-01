@@ -9,18 +9,23 @@ SLOT=${SLOT:-1x0p5}
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 EDA_IMAGE='docker.io/hpretl/iic-osic-tools:2026.07@sha256:5d6adf1f437cd0f2f8f8614488ec3c247ba8c768f4663a25d5e997b30ccb13b0'
 DOCKER_CLI=$(command -v docker || echo /Applications/Docker.app/Contents/Resources/bin/docker)
+# PDK root: the project's frozen commit fetched with ciel (ADR 0004 addendum
+# 2026-11-01: 792ef670), outside the fork; the container image's own
+# /foss/pdks is still f6eeac7d.
+PDK_ROOT_HOST=${PDK_ROOT_HOST:-$HOME/Desktop/mywork/pdk792}
 "$DOCKER_CLI" run --rm --entrypoint /bin/bash \
     -v "$script_dir:/foss/designs/padring-experiment:rw" \
+    -v "$PDK_ROOT_HOST:/pdk_root:ro" \
     "$EDA_IMAGE" -lc '
         set -euo pipefail
         cd /foss/designs/padring-experiment
         make defines PDK=gf180mcuD SLOT='"$SLOT"' SRAM=gf180mcu_ocd_ip_sram
-        python3 scripts/patch_pad_libs.py gf180mcu
+        python3 scripts/patch_pad_libs.py /pdk_root
         # The librelane CLI wrapper prepends the LibreLane-matched OpenROAD build;
         # the Python flow needs the same (the default openroad lacks the STA "scene" API).
         export PATH=/foss/tools/openroad-librelane/bin:$PATH
         SRAM_DEFINE=SRAM_gf180mcu_ocd_ip_sram python3 scripts/chip_flow.py \
             librelane/slots/slot_'"$SLOT"'.yaml librelane/macros/macros_3v3.yaml librelane/config.yaml \
-            --pdk gf180mcuD --pdk-root /foss/designs/padring-experiment/gf180mcu --manual-pdk \
+            --pdk gf180mcuD --pdk-root /pdk_root --manual-pdk \
             --scl gf180mcu_as_sc_mcu7t3v3 --pad gf180mcu_ocd_io '"$*"'
     '
